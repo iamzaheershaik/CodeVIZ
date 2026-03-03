@@ -28,20 +28,20 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
     const svgHeight = Math.max(stackHeight, heapHeight, 280);
 
     return (
-        <div className="memory-visualizer">
-            <svg width="100%" viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="memory-svg">
+        <div className="p-6 bg-zinc-950/80 rounded-b-2xl overflow-x-auto custom-scrollbar w-full">
+            <svg width="100%" viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full min-w-[700px] h-auto drop-shadow-xl" style={{ maxHeight: '500px' }}>
                 <defs>
                     <linearGradient id="stackGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="rgba(79,140,255,0.15)" />
-                        <stop offset="100%" stopColor="rgba(79,140,255,0.03)" />
+                        <stop offset="0%" stopColor="rgba(99,102,241,0.15)" />
+                        <stop offset="100%" stopColor="rgba(99,102,241,0.03)" />
                     </linearGradient>
                     <linearGradient id="heapGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="rgba(168,85,247,0.15)" />
-                        <stop offset="100%" stopColor="rgba(168,85,247,0.03)" />
+                        <stop offset="0%" stopColor="rgba(192,38,211,0.15)" />
+                        <stop offset="100%" stopColor="rgba(192,38,211,0.03)" />
                     </linearGradient>
                     <linearGradient id="outputGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="rgba(52,211,153,0.15)" />
-                        <stop offset="100%" stopColor="rgba(52,211,153,0.03)" />
+                        <stop offset="0%" stopColor="rgba(16,185,129,0.15)" />
+                        <stop offset="100%" stopColor="rgba(16,185,129,0.03)" />
                     </linearGradient>
                     <filter id="glow">
                         <feGaussianBlur stdDeviation="3" result="blur" />
@@ -50,8 +50,8 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                 </defs>
 
                 {/* ===== CALL STACK ===== */}
-                <rect x={stackX} y={10} width={360} height={svgHeight - 20} rx="12" fill="url(#stackGrad)" stroke="rgba(79,140,255,0.3)" strokeWidth="1" />
-                <text x={stackX + 180} y={headerY} textAnchor="middle" fill="#4f8cff" fontSize="13" fontWeight="700">📚 CALL STACK</text>
+                <rect x={stackX} y={10} width={360} height={svgHeight - 20} rx="12" fill="url(#stackGrad)" stroke="rgba(99,102,241,0.3)" strokeWidth="1" />
+                <text x={stackX + 180} y={headerY} textAnchor="middle" fill="#818cf8" fontSize="13" fontWeight="700" letterSpacing="1">📚 CALL STACK</text>
 
                 {stack.length === 0 && (
                     <text x={stackX + 180} y={startY + 40} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontStyle="italic">empty</text>
@@ -61,19 +61,19 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                     const y = startY + i * (frameH + 8);
                     const isTop = i === stack.length - 1;
                     return (
-                        <g key={`stack-${i}-${animateKey}`} className="mem-animate-in" style={{ animationDelay: `${i * 0.1}s` }}>
+                        <g key={`stack-${i}-${animateKey}`} className="animate-fade-in-up" style={{ animationDelay: `${i * 0.1}s` }}>
                             <rect
                                 x={stackX + 10} y={y} width={340} height={frameH} rx="8"
-                                fill={isTop ? 'rgba(79,140,255,0.12)' : 'rgba(255,255,255,0.04)'}
-                                stroke={isTop ? '#4f8cff' : 'rgba(255,255,255,0.1)'}
+                                fill={isTop ? 'rgba(99,102,241,0.15)' : 'rgba(255,255,255,0.03)'}
+                                stroke={isTop ? '#818cf8' : 'rgba(255,255,255,0.1)'}
                                 strokeWidth={isTop ? 2 : 1}
                                 filter={isTop ? 'url(#glow)' : ''}
                             />
-                            <text x={stackX + 24} y={y + 16} fill={isTop ? '#4f8cff' : '#aaa'} fontSize="11" fontWeight="700">
+                            <text x={stackX + 24} y={y + 16} fill={isTop ? '#c7d2fe' : '#9ca3af'} fontSize="11" fontWeight="700">
                                 {String(frame.name).length > 45 ? String(frame.name).substring(0, 42) + '...' : frame.name}
                             </text>
                             {frame.vars && (
-                                <text x={stackX + 24} y={y + 32} fill="rgba(255,255,255,0.6)" fontSize="10" fontFamily="'Fira Code', monospace">
+                                <text x={stackX + 24} y={y + 32} fill="rgba(255,255,255,0.5)" fontSize="10" fontFamily="'Fira Code', monospace">
                                     {frame.vars.map(v => `${v.name}: ${v.value}`).join(', ').length > 45
                                         ? frame.vars.map(v => `${v.name}: ${v.value}`).join(', ').substring(0, 42) + '...'
                                         : frame.vars.map(v => `${v.name}: ${v.value}`).join(', ')}
@@ -84,7 +84,7 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                                 <line
                                     x1={stackX + 350} y1={y + frameH / 2}
                                     x2={heapX} y2={startY + (frame.refTo * 70) + 25}
-                                    stroke="#4f8cff" strokeWidth="1.5" strokeDasharray="4 3"
+                                    stroke="#818cf8" strokeWidth="1.5" strokeDasharray="4 3"
                                     markerEnd="url(#arrowBlue)"
                                     opacity="0.6"
                                 />
@@ -94,8 +94,8 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                 })}
 
                 {/* ===== HEAP MEMORY ===== */}
-                <rect x={heapX} y={10} width={230} height={svgHeight - 20} rx="12" fill="url(#heapGrad)" stroke="rgba(168,85,247,0.3)" strokeWidth="1" />
-                <text x={heapX + 115} y={headerY} textAnchor="middle" fill="#a855f7" fontSize="13" fontWeight="700">🧠 HEAP MEMORY</text>
+                <rect x={heapX} y={10} width={230} height={svgHeight - 20} rx="12" fill="url(#heapGrad)" stroke="rgba(192,38,211,0.3)" strokeWidth="1" />
+                <text x={heapX + 115} y={headerY} textAnchor="middle" fill="#e879f9" fontSize="13" fontWeight="700" letterSpacing="1">🧠 HEAP MEMORY</text>
 
                 {heap.length === 0 && (
                     <text x={heapX + 115} y={startY + 40} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="12" fontStyle="italic">empty</text>
@@ -105,16 +105,16 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                     const y = startY + i * 70;
                     const isNew = obj.isNew;
                     return (
-                        <g key={`heap-${i}-${animateKey}`} className={isNew ? 'mem-animate-in' : ''} style={{ animationDelay: `${i * 0.15}s` }}>
+                        <g key={`heap-${i}-${animateKey}`} className={isNew ? 'animate-fade-in-up' : ''} style={{ animationDelay: `${i * 0.15}s` }}>
                             <rect
                                 x={heapX + 10} y={y} width={210} height={60} rx="8"
-                                fill={isNew ? 'rgba(168,85,247,0.12)' : 'rgba(255,255,255,0.04)'}
-                                stroke={isNew ? '#a855f7' : 'rgba(255,255,255,0.1)'}
+                                fill={isNew ? 'rgba(192,38,211,0.15)' : 'rgba(255,255,255,0.03)'}
+                                stroke={isNew ? '#e879f9' : 'rgba(255,255,255,0.1)'}
                                 strokeWidth={isNew ? 2 : 1}
                                 filter={isNew ? 'url(#glow)' : ''}
                             />
-                            <text x={heapX + 20} y={y + 16} fill="#a855f7" fontSize="10" fontWeight="600">{obj.address || `0x${(1000 + i * 8).toString(16)}`}</text>
-                            <text x={heapX + 200} y={y + 16} fill="rgba(255,255,255,0.4)" fontSize="9" textAnchor="end">{obj.type}</text>
+                            <text x={heapX + 20} y={y + 16} fill="#e879f9" fontSize="10" fontWeight="600">{obj.address || `0x${(1000 + i * 8).toString(16)}`}</text>
+                            <text x={heapX + 200} y={y + 16} fill="rgba(255,255,255,0.3)" fontSize="9" textAnchor="end">{obj.type}</text>
 
                             {/* Render array cells */}
                             {obj.type === 'Array' && obj.values && (
@@ -128,16 +128,16 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                                         return (
                                             <g key={vi}>
                                                 <rect x={cx} y={y + 24} width={cellW} height={28} rx="4"
-                                                    fill={val.highlight ? 'rgba(79,140,255,0.2)' : 'rgba(255,255,255,0.06)'}
-                                                    stroke={val.highlight ? '#4f8cff' : 'rgba(255,255,255,0.1)'}
+                                                    fill={val.highlight ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.05)'}
+                                                    stroke={val.highlight ? '#818cf8' : 'rgba(255,255,255,0.1)'}
                                                 />
-                                                <text x={cx + cellW / 2} y={y + 37} textAnchor="middle" fill={val.highlight ? '#4f8cff' : '#ccc'} fontSize="9" fontFamily="'Fira Code', monospace">{displayVal}</text>
+                                                <text x={cx + cellW / 2} y={y + 37} textAnchor="middle" fill={val.highlight ? '#c7d2fe' : '#d1d5db'} fontSize="9" fontFamily="'Fira Code', monospace">{displayVal}</text>
                                                 <text x={cx + cellW / 2} y={y + 52} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="7">[{vi}]</text>
                                             </g>
                                         );
                                     })}
                                     {obj.values.length > 6 && (
-                                        <text x={heapX + 18 + 6 * (Math.min(28, 180 / 6) + 2) + 5} y={y + 40} fill="rgba(255,255,255,0.5)" fontSize="12">...</text>
+                                        <text x={heapX + 18 + 6 * (Math.min(28, 180 / 6) + 2) + 5} y={y + 40} fill="rgba(255,255,255,0.4)" fontSize="14">...</text>
                                     )}
                                 </g>
                             )}
@@ -170,14 +170,14 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                 {/* ===== OUTPUT CONSOLE ===== */}
                 {output.length > 0 && (
                     <>
-                        <rect x={outputX} y={10} width={280} height={Math.max(output.length * 22 + 50, 100)} rx="12" fill="url(#outputGrad)" stroke="rgba(52,211,153,0.3)" strokeWidth="1" />
-                        <text x={outputX + 140} y={headerY} textAnchor="middle" fill="#34d399" fontSize="13" fontWeight="700">💻 OUTPUT</text>
+                        <rect x={outputX} y={10} width={280} height={Math.max(output.length * 22 + 50, 100)} rx="12" fill="url(#outputGrad)" stroke="rgba(16,185,129,0.3)" strokeWidth="1" />
+                        <text x={outputX + 140} y={headerY} textAnchor="middle" fill="#34d399" fontSize="13" fontWeight="700" letterSpacing="1">💻 OUTPUT</text>
                         {output.map((line, i) => {
                             const lineStr = String(line);
                             const displayLine = lineStr.length > 40 ? lineStr.substring(0, 37) + '...' : lineStr;
                             return (
-                                <text key={i} x={outputX + 12} y={startY + i * 22} fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="'Fira Code', monospace"
-                                    className="mem-animate-in" style={{ animationDelay: `${i * 0.1}s` }}
+                                <text key={i} x={outputX + 12} y={startY + i * 22} fill="rgba(16,185,129,0.8)" fontSize="11" fontFamily="'Fira Code', monospace"
+                                    className="animate-fade-in-up" style={{ animationDelay: `${i * 0.1}s` }}
                                 >
                                     {'>'} {displayLine}
                                 </text>
@@ -189,7 +189,7 @@ export default function MemoryVisualizer({ memoryState, activeStep }) {
                 {/* Arrow marker */}
                 <defs>
                     <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                        <path d="M0,0 L8,3 L0,6 Z" fill="#4f8cff" />
+                        <path d="M0,0 L8,3 L0,6 Z" fill="#818cf8" />
                     </marker>
                 </defs>
             </svg>

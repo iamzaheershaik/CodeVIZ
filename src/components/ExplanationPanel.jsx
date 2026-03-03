@@ -152,7 +152,7 @@ export default function ExplanationPanel({ concept, activeStep, setActiveStep })
                                     }`}>
                                         {idx + 1}
                                     </div>
-                                    <div className="flex flex-col gap-1 w-full mt-1.5">
+                                    <div className="flex flex-col gap-1 min-w-0 flex-1 mt-1.5">
                                         <h3 className={`font-semibold text-base transition-colors ${isActive ? 'text-white' : 'text-zinc-400'}`}>
                                             {step.title}
                                         </h3>
@@ -168,8 +168,8 @@ export default function ExplanationPanel({ concept, activeStep, setActiveStep })
                                                 >
                                                     <p className="text-zinc-300 text-sm leading-relaxed mt-3 mb-4 break-words whitespace-pre-wrap">{step.explanation}</p>
                                                     {step.code && (
-                                                        <div className="rounded-lg overflow-x-auto border border-white/10 text-xs shadow-inner w-full">
-                                                            <div className="min-w-0 w-fit">
+                                                        <div className="rounded-lg overflow-x-auto border border-white/10 text-xs shadow-inner w-full min-w-0">
+                                                            <div className="min-w-0 w-full">
                                                                 <SyntaxHighlighter
                                                                     language={step.language === 'jsx' ? 'javascript' : step.language || 'javascript'}
                                                                     style={vscDarkPlus}
@@ -178,7 +178,7 @@ export default function ExplanationPanel({ concept, activeStep, setActiveStep })
                                                                         padding: '1rem',
                                                                         background: 'rgba(0,0,0,0.6)',
                                                                     }}
-                                                                    wrapLongLines={false}
+                                                                    wrapLongLines={true}
                                                                 >
                                                                     {step.code}
                                                                 </SyntaxHighlighter>
